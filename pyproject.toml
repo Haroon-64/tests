@@ -1,0 +1,71 @@
+[project]
+name = "tests"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+addopts = "-v"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.19.1",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.3.0",
+    "aiofiles>=25.1.0",
+    "tox>=4.49.1",
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = []
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py312, type, lint
+isolated_build = True
+
+[testenv]
+description = Run tests
+deps =
+    pytest>=9.0
+    pytest-cov>=7.0
+commands =
+    pytest {posargs:tests}
+
+[testenv:type]
+description = Run type checker
+deps =
+    mypy>=1.19
+commands =
+    mypy src
+
+[testenv:lint]
+description = Run linter
+skip_install = true
+deps =
+    ruff>=0.3.0
+commands =
+    ruff check src
+"""
