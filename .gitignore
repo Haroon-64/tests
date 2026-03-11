@@ -5,7 +5,12 @@ build/
 dist/
 wheels/
 *.egg-info
+.tox/
+/*cache/
 
 # Virtual environments
 .venv/
+
+# ide
 .vscode/
+.idea/
