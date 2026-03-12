@@ -21,3 +21,12 @@ repos:
         types: [python]
         pass_filenames: false
         always_run: true
+  - repo: https://github.com/thoughtworks/talisman
+    rev: 'v1.37.0' 
+    hooks: 
+      - id: talisman-commit
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 'v6.0.0'
+    hooks:
+      - id: check-added-large-files
+        
