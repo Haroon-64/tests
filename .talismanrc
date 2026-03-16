@@ -1,4 +1,10 @@
 fileignoreconfig:
 - filename: src/app/logger.py
   checksum: 4f8bd1cb7c78d328f044cfbc4947812af61de43b51a5eb5caccb9ec157ad78c1
+- filename: .env.example
+  checksum: ba81ed1d8857f8b8b4b6053148df4aff96a952c998dc10d6f01c67c9ebc8ffb4
+- filename: uv.lock
+  checksum: a138ad32d39a8f2ce09dae40206cdff6dcf8db69ba8e7ef8b9344e5787dec42f
+- filename: src/app/config.py
+  checksum: f290a0ea04d329171397ad0b753d0b9243631ac01b0bd212e6f3dae252dd8d0f
 version: "1.0"
