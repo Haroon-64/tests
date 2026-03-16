@@ -1,0 +1,4 @@
+fileignoreconfig:
+- filename: src/app/logger.py
+  checksum: 4f8bd1cb7c78d328f044cfbc4947812af61de43b51a5eb5caccb9ec157ad78c1
+version: "1.0"

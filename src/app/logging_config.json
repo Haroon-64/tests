@@ -1,9 +1,10 @@
 {
   "version": 1,
   "disable_existing_loggers": false,
+
   "formatters": {
     "json": {
-      "()": "my_logging.JSONFormatter",
+      "()": "app.logger.JSONFormatter",
       "field_map": {
         "timestamp": "asctime",
         "level": "levelname",
@@ -13,35 +14,47 @@
         "function": "funcName",
         "line": "lineno"
       }
+    },
+    "simple": {
+      "format": "%(levelname)s %(name)s %(message)s"
     }
   },
+
+  "filters": {
+    "redact": {
+      "()": "app.logger.RedactFilter"
+    }
+  },
+
   "handlers": {
+    "queue": {
+      "class": "logging.handlers.QueueHandler",
+      "queue": "ext://app.logger.log_queue",
+      "level": "DEBUG"
+    },
+
     "file": {
       "class": "logging.handlers.RotatingFileHandler",
       "level": "DEBUG",
       "formatter": "json",
-      "filename": "my_app.jsonl",
+      "filters": ["redact"],
+      "filename": "app.log",
       "maxBytes": 5242880,
       "backupCount": 3,
       "encoding": "utf-8"
     },
+
     "stderr": {
       "class": "logging.StreamHandler",
       "level": "WARNING",
       "formatter": "simple",
+      "filters": ["redact"],
       "stream": "ext://sys.stderr"
-    },
-    "queue": {
-      "class": "logging.handlers.QueueHandler",
-      "level": "DEBUG",
-      "handlers": ["file", "stderr"]
     }
   },
-  "loggers": {
-    "": {
-      "level": "DEBUG",
-      "handlers": ["queue"],
-      "propagate": true
-    }
+
+  "root": {
+    "level": "DEBUG",
+    "handlers": ["queue"]
   }
 }
