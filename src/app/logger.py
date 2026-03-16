@@ -6,8 +6,9 @@ import logging.handlers
 import pathlib
 import queue
 import re
+import typing
 
-log_queue = queue.Queue(-1)
+log_queue: queue.Queue[logging.LogRecord] = queue.Queue(-1)
 
 
 class JSONFormatter(logging.Formatter):
@@ -23,6 +24,7 @@ class JSONFormatter(logging.Formatter):
         output = {}
 
         for output_name, record_attr in self.field_map.items():
+            value: typing.Any
             if record_attr == "asctime":
                 value = self.formatTime(record, self.datefmt)
             else:
@@ -49,7 +51,7 @@ class RedactFilter(logging.Filter):
         re.compile(r"\b\d{16}\b"),  # credit card
     ]
 
-    def _redact_value(self, value):
+    def _redact_value(self, value: typing.Any) -> typing.Any:
         if isinstance(value, str):
             for p in self.VALUE_PATTERNS:
                 value = p.sub(self.REPLACEMENT, value)
@@ -85,12 +87,13 @@ class RedactFilter(logging.Filter):
         return True
 
 
-def setup_logging(config_path="logging_config.json"):
+def setup_logging(config_path: str = "logging_config.json") -> None:
     cfg = json.loads(pathlib.Path(config_path).read_text())
     logging.config.dictConfig(cfg)
 
-    file_h = logging._handlers["file"]
-    stderr_h = logging._handlers["stderr"]
+    handlers = getattr(logging, "_handlers")
+    file_h = handlers["file"]
+    stderr_h = handlers["stderr"]
 
     listener = logging.handlers.QueueListener(
         log_queue,
