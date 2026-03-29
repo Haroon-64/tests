@@ -10,6 +10,9 @@ dependencies = [
     "pydantic-settings>=2.13.1",
 ]
 
+[tool.uv]
+exclude-newer = "7 days"
+
 [tool.mypy]
 python_version = "3.12"
 strict = true
